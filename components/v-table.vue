@@ -1,25 +1,39 @@
 <template>
-  <section class="container">
-    <div class="container__inner">
-      <div class="container__form-card-number">
-        <label for="cardNumber">Card Number
-            <input id="cardNumber">
-        </label>
-      </div>
-      <div class="container__form-card-username">
-        <label for="userName">Card Holders
-          <input id="userName">
-        </label>
-      </div>
-      <div class="container__form-card-number">
-        <label for="cardNumber">Card Number
-          <select>
-            <option value="" disabled selected>Month</option>
-            <option :value="n < 10 ? '0' + n : n" v-for="n in 12" v-bind:key="n">
-              {{n < 10 ? '0' + n : n}}
-            </option>
-          </select>
-        </label>
+  <section class="block">
+    <div class="block__inner">
+      <div class="block__content">
+        <div class="block__form-card">
+          <p class="block__form-header form-header">Card Number</p>
+          <input id="cardNumber" class="form-card form-card-number" v-model="cardNumber">
+        </div>
+        <div class="block__form-card">
+          <p class="block__form-header form-header">Card Holders</p>
+          <input id="userName" class="form-card form-card-username">
+        </div>
+        <div class="block__form-card form-card-date">
+          <p class="block__form-header form-header">Expiration Date</p>
+          <div class="block__form-date">
+            <select class="form-card form-card-month">
+              <option value="" disabled selected>Month</option>
+              <option :value="n < 10 ? '0' + n : n" v-for="n in 12" v-bind:key="n">
+                {{ n < 10 ? '0' + n : n }}
+              </option>
+            </select>
+            <select class="form-card form-card-year">
+              <option value="" disabled selected>Year</option>
+              <option :value="$index + minCardYear" v-for="(n, $index) in 12" v-bind:key="n">
+                {{ $index + minCardYear }}
+              </option>
+            </select>
+          </div>
+        </div>
+        <div class="block__form-card form-card-min">
+          <p class="block__form-header form-header">CVV</p>
+          <input id="cvv" class="form-card form-card-cvv">
+        </div>
+        <div class="block__submit-btn">
+          <button class="submit-btn">Submit</button>
+        </div>
       </div>
     </div>
   </section>
@@ -27,10 +41,114 @@
 
 <script>
 export default {
-  name: "v-table"
+  name: "v-table",
+  data: () => ({
+    minCardYear: new Date().getFullYear(),
+    cardNumber: ''
+  })
 }
 </script>
 
-<style scoped>
+<style scoped lang="stylus">
+.block {
+  display flex
+  justify-content center
+  align-items center
+  position absolute
+  top 50%
+  left 70%
+  transform translate(-50%, -50%)
+  width 500px
+  height 500px
+  border solid 1px #000
+  border-radius 10px
 
+  &__inner {
+    display flex
+    justify-content center
+    align-items center
+    position relative
+    width 90%
+    height 90%
+
+    .block__content {
+      position absolute
+      display flex
+      justify-content center
+      flex-wrap wrap
+      width 100%
+      height 60%
+
+      .block__submit-btn {
+        position relative
+        top 20px
+
+        &:active {
+          top: 23px;
+        }
+      }
+
+      .submit-btn {
+        padding 15px 40px
+        color #fff
+        background-color #0072FF
+        border none
+        border-radius 5px
+        cursor pointer
+        font-size 1.1em
+      }
+
+      .block__form-card {
+        display flex
+        align-items flex-start
+        flex-direction column
+        width 100%
+        cursor pointer
+
+        .form-card-cvv {
+          width 100%
+          height 30px
+        }
+
+        .block__form-date {
+          position relative
+
+          .form-card-month, .form-card-year {
+            width 100px
+          }
+        }
+
+        .form-card {
+          width 100%
+          height 30px
+          color #838383
+          outline none
+
+          &:focus {
+            border solid 2px #0072FF
+          }
+        }
+
+        .block__form-header {
+          position relative
+        }
+
+        .form-header {
+          font normal 1.3em 'Open Sans', sans-serif
+          color #7c7c7c
+        }
+      }
+
+      .form-card-date {
+        display flex
+        flex-direction column
+        width 50%
+      }
+
+      .form-card-min {
+        width 50%
+      }
+    }
+  }
+}
 </style>
