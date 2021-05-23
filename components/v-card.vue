@@ -1,6 +1,6 @@
 <template>
-  <section class="card">
-    <div class="card__inner">
+  <section class="card" :class="{'animate' : sizeBackl}">
+    <div class="card__inner front" v-if="sizeBackl !== true">
       <figure class="card__chip">
         <img class="card__chip-img" src="@/assets/images/chip.png" alt="chip" width="55" height="42">
       </figure>
@@ -36,6 +36,13 @@
         </div>
       </div>
     </div>
+    <div class="card__inner back" v-if="sizeBackl === true" :class="{'show-back' : sizeBackl}">
+      <div class="card__line"></div>
+      <div class="card__cvv-block">
+        <p class="cvv">170</p>
+      </div>
+    </div>
+    <button class="test" @click="showBack()">Перевернуть</button>
   </section>
 </template>
 
@@ -46,7 +53,17 @@ export default {
     defaultNumber: '#### #### #### ####',
     defaultUserName: 'Full Name',
     defaultDate: 'MM/YY',
-  })
+    defaultCvv: '',
+    sizeBackl: false
+  }),
+  methods: {
+    showBack() {
+      this.sizeBackl = true
+      setTimeout(() => {
+        this.sizeBackl = false
+      },2000)
+    }
+  }
 }
 </script>
 
@@ -58,14 +75,14 @@ export default {
   position absolute
   top 50%
   left 25%
-  transform translate(-50%, -50%) rotate(360deg)
+  // transform translate(-50%, -50%)
   transform-style: preserve-3d;
   width 450px
   height 250px
   border-radius 20px
   background url("https://ethnomir.ru/upload/medialibrary/2d9/meduza.jpg") no-repeat center bottom
   cursor pointer
-  transition box-shadow .5s ease
+  transition all .5s ease
 
   &:hover {
     box-shadow: rgba(33, 35, 38, 0.1) 0px 10px 10px -10px;
@@ -75,6 +92,34 @@ export default {
     position relative
     width 400px
     height 200px
+
+    .card__line {
+      position absolute
+      top 30%
+      left 50%
+      transform translate(-50%, -50%)
+      width 112%
+      height 40px
+      background-color #fff
+    }
+
+    .card__cvv-block {
+      display flex
+      justify-content center
+      align-items center
+      position absolute
+      bottom 0
+      right 0
+      width 60px
+      height 40px
+      border-radius 10px
+      background-color #fff
+    }
+
+    .cvv {
+      font normal 1.7em sans-serif
+      color #838383
+    }
 
     .user-data {
       display flex
@@ -135,5 +180,28 @@ export default {
       right 0
     }
   }
+
+  .front {
+    position absolute
+  }
+
+  .back {
+    display none
+    transform: rotateY(180deg);
+  }
+
+  .show-back {
+    display block
+  }
+
+  .test {
+    position absolute
+    left: 800px;
+  }
 }
+
+  .animate {
+    transition all .5s ease
+    transform rotateY(180deg)
+  }
 </style>
