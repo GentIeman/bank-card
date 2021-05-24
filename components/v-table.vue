@@ -4,24 +4,24 @@
       <div class="block__content">
         <div class="block__form-card">
           <p class="block__form-header form-header">Card Number</p>
-          <input id="cardNumber" class="form-card form-card-number" v-model="cardNumber">
+          <input id="cardNumber" type="number" min="0" class="form-card form-card-number" v-model="cardNumber" placeholder="0000 0000 0000 0000">
         </div>
         <div class="block__form-card">
           <p class="block__form-header form-header">Card Holders</p>
-          <input id="userName" class="form-card form-card-username">
+          <input id="userName" type="text" class="form-card form-card-username" v-model="cardHolders" placeholder="Josh Smith">
         </div>
         <div class="block__form-card form-card-date">
           <p class="block__form-header form-header">Expiration Date</p>
           <div class="block__form-date">
-            <select class="form-card form-card-month">
+            <select class="form-card form-card-month" v-model="cardMonth">
               <option value="" disabled selected>Month</option>
-              <option :value="n < 10 ? '0' + n : n" v-for="n in 12" v-bind:key="n">
+              <option :value="n < 10 ? '0' + n : n" v-for="n in 12" :key="n">
                 {{ n < 10 ? '0' + n : n }}
               </option>
             </select>
-            <select class="form-card form-card-year">
+            <select class="form-card form-card-year" v-model="cardYear">
               <option value="" disabled selected>Year</option>
-              <option :value="$index + minCardYear" v-for="(n, $index) in 12" v-bind:key="n">
+              <option :value="$index + minCardYear" v-for="(n, $index) in 12" :key="n">
                 {{ $index + minCardYear }}
               </option>
             </select>
@@ -29,10 +29,10 @@
         </div>
         <div class="block__form-card form-card-min">
           <p class="block__form-header form-header">CVV</p>
-          <input id="cvv" class="form-card form-card-cvv">
+          <input id="cvv" maxlength="4" type="number" class="form-card form-card-cvv" v-model="cvv" placeholder="123">
         </div>
         <div class="block__submit-btn">
-          <button class="submit-btn">Submit</button>
+          <button class="submit-btn" @click="addData">Submit</button>
         </div>
       </div>
     </div>
@@ -40,12 +40,40 @@
 </template>
 
 <script>
+import {mapGetters, mapActions} from 'vuex';
+
 export default {
   name: "v-table",
   data: () => ({
     minCardYear: new Date().getFullYear(),
-    cardNumber: ''
-  })
+    cardNumber: '',
+    cardHolders: '',
+    cardMonth: '',
+    cardYear: '',
+    cvv: ''
+  }),
+  computed: {
+    ...mapGetters(['getData']),
+  },
+  methods: {
+    ...mapActions({addNewData: 'addNewData'}),
+    addData() {
+      this.addNewData({
+        number: this.cardNumber,
+        holder: this.cardHolders,
+        year: this.cardYear,
+        month: this.cardMonth,
+        cvv: this.cvv
+      })
+      this.cardNumber = '';
+      this.cardHolders = '';
+      this.cardYear = '';
+      this.cardMonth = '';
+      this.cvv = '';
+
+      console.log(this.getData)
+    },
+  },
 }
 </script>
 
@@ -123,6 +151,7 @@ export default {
           height 30px
           color #838383
           outline none
+          padding 0 10px
 
           &:focus {
             border solid 2px #0072FF
