@@ -95,7 +95,8 @@ export default {
       transform translate(-50%, -50%)
       width 112%
       height 40px
-      background-color #fff
+      opacity 0.5
+      background-color #000
     }
 
     .card__cvv-block {
