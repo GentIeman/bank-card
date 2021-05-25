@@ -4,11 +4,13 @@
       <div class="block__content">
         <div class="block__form-card">
           <p class="block__form-header form-header">Card Number</p>
-          <input id="cardNumber" type="number" min="0" class="form-card form-card-number" v-model="cardNumber" placeholder="0000 0000 0000 0000">
+          <input id="cardNumber" type="text" min="0" v-mask="cardNumberMask" class="form-card form-card-number" v-model="cardNumber"
+                 placeholder="0000 0000 0000 0000">
         </div>
         <div class="block__form-card">
           <p class="block__form-header form-header">Card Holders</p>
-          <input id="userName" type="text" class="form-card form-card-username" v-model="cardHolders" placeholder="Josh Smith">
+          <input id="userName" type="text" class="form-card form-card-username" v-model="cardHolders"
+                 placeholder="Josh Smith">
         </div>
         <div class="block__form-card form-card-date">
           <p class="block__form-header form-header">Expiration Date</p>
@@ -29,7 +31,7 @@
         </div>
         <div class="block__form-card form-card-min">
           <p class="block__form-header form-header">CVV</p>
-          <input id="cvv" maxlength="4" type="number" class="form-card form-card-cvv" v-model="cvv" placeholder="123">
+          <input id="cvv" maxlength="4" type="text" class="form-card form-card-cvv" v-model="cvv" placeholder="123">
         </div>
         <div class="block__submit-btn">
           <button class="submit-btn" @click="addData">Submit</button>
@@ -50,10 +52,22 @@ export default {
     cardHolders: '',
     cardMonth: '',
     cardYear: '',
-    cvv: ''
+    cvv: '',
+    cardMask: "#### #### #### ####"
   }),
   computed: {
     ...mapGetters(['getData']),
+    filterDigits: {
+      get() {
+        return this.cvv.replace(/\D/g, '')
+      },
+      set(newValue) {
+        this.cvv=newValue
+      }
+    },
+    cardNumberMask() {
+      return this.cardMask;
+    }
   },
   methods: {
     ...mapActions({addNewData: 'addNewData'}),
@@ -73,7 +87,7 @@ export default {
 
       console.log(this.getData)
     },
-  },
+  }
 }
 </script>
 
