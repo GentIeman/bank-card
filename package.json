@@ -12,7 +12,8 @@
     "core-js": "^3.9.1",
     "nuxt": "^2.15.3",
     "stylus": "^0.54.8",
-    "stylus-loader": "^4.0.0"
+    "stylus-loader": "^4.0.0",
+    "v-mask": "^2.2.4"
   },
   "devDependencies": {
     "@nuxt/types": "^2.15.6"
