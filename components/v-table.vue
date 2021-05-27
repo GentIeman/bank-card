@@ -10,7 +10,7 @@
         <div class="block__form-card">
           <p class="block__form-header form-header">Card Holders</p>
           <input id="userName" type="text" class="form-card form-card-username" v-model="cardHolders"
-                 placeholder="Josh Smith">
+                 placeholder="Josh Smith" :onkeyup="this.cardHolders = this.cardHolders.replace(/[0-9]/g,'')" @click="showCVV">
         </div>
         <div class="block__form-card form-card-date">
           <p class="block__form-header form-header">Expiration Date</p>
@@ -31,7 +31,7 @@
         </div>
         <div class="block__form-card form-card-min">
           <p class="block__form-header form-header">CVV</p>
-          <input id="cvv" maxlength="4" type="text" class="form-card form-card-cvv" v-model="cvv" placeholder="123">
+          <input id="cvv" maxlength="3" type="text" class="form-card form-card-cvv" v-model="cvv" placeholder="123" :onkeyup="this.cvv = this.cvv.replace(/[^\d]/g,'')">
         </div>
         <div class="block__submit-btn">
           <button class="submit-btn" @click="addData">Submit</button>
@@ -53,18 +53,11 @@ export default {
     cardMonth: '',
     cardYear: '',
     cvv: '',
-    cardMask: "#### #### #### ####"
+    cardMask: "#### #### #### ####",
+    isShowCVV: false
   }),
   computed: {
     ...mapGetters(['getData']),
-    filterDigits: {
-      get() {
-        return this.cvv.replace(/\D/g, '')
-      },
-      set(newValue) {
-        this.cvv=newValue
-      }
-    },
     cardNumberMask() {
       return this.cardMask;
     }
@@ -87,7 +80,10 @@ export default {
 
       console.log(this.getData)
     },
-  }
+    showCVV() {
+      return this.isShowCVV = true
+    }
+  },
 }
 </script>
 
