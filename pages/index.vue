@@ -1,12 +1,19 @@
 <template>
   <div class="container">
-    <v-card />
     <v-table />
   </div>
 </template>
 
 <script>
-export default {}
+export default {
+  data: () => ({
+    defaultNumber: '#### #### #### ####',
+    defaultUserName: 'Full Name',
+    defaultDate: 'MM/YY',
+    defaultCvv: '',
+    showBackSize: false
+  }),
+}
 </script>
 
 <style lang="stylus">
