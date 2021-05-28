@@ -7,8 +7,8 @@
             <img class="card__chip-img" src="@/assets/images/chip.png" alt="chip" width="55" height="42">
           </figure>
             <div class="card__number number">
-              <span v-if="cardNumber">{{ cardNumber }}</span>
-              <span v-else> {{ defaultNumber }}</span>
+              <p v-if="cardNumber">{{ cardNumber }}</p>
+              <p v-else> {{ defaultNumber }}</p>
             </div>
           <div class="card__type-card">
             <svg style="fill: #0072FF" width="80px" height="80px" version="1.1" viewBox="0 0 64 64" xml:space="preserve"
@@ -29,13 +29,16 @@
               <header class="user-data__header">
                 <p class="header">Card Holder</p>
               </header>
-              <p class="username">{{ defaultUserName }}</p>
+              <p v-if="cardHolders" class="username">{{ cardHolders }}</p>
+              <p v-else class="username">{{ defaultUserName }}</p>
             </div>
             <div class="user-data__date">
               <header class="user-data__header">
                 <p class="header">Expires</p>
               </header>
-              <p class="date">{{ cardMonth }} / {{ String(cardYear).slice(2,4) }}</p>
+              <p class="date" v-if="cardMonth || cardYear">{{ cardMonth }} / {{ String(cardYear).slice(2, 4) }}</p>
+              <p class="date" v-else>{{ defaultDate }}</p>
+
             </div>
           </div>
         </div>
@@ -44,7 +47,8 @@
         <div class="card__inner" v-if="isShowCVV === true" :class="{'show-back' : isShowCVV}">
           <div class="card__line"></div>
           <div class="card__cvv-block">
-            <p class="cvv">170</p>
+            <p class="cvv" v-if="cardCVV">{{ cardCVV }}</p>
+            <p class="cvv" v-else>{{ defaultCvv }}</p>
           </div>
         </div>
       </div>
@@ -82,7 +86,8 @@
           </div>
           <div class="block__form-card form-card-min">
             <p class="block__form-header form-header">CVV</p>
-            <input id="cvv" maxlength="3" type="text" class="form-card form-card-cvv" v-model="cvv" placeholder="123"
+            <input id="cvv" maxlength="3" type="text" class="form-card form-card-cvv" v-model="cardCVV"
+                   placeholder="123"
                    @click="isShowCVV = true" @blur="isShowCVV = false">
           </div>
           <div class="block__submit-btn">
@@ -104,13 +109,13 @@ export default {
     cardHolders: '',
     cardMonth: '',
     cardYear: '',
-    cvv: '',
+    cardCVV: '',
     cardMask: "#### #### #### ####",
     isShowCVV: false,
     defaultNumber: '#### #### #### ####',
     defaultUserName: 'Full Name',
     defaultDate: 'MM/YY',
-    defaultCvv: '',
+    defaultCvv: '***',
     animate: true,
   }),
   computed: {
@@ -131,6 +136,7 @@ export default {
   height 100%
   margin 0 80px
 }
+
 .card {
   display flex
   justify-content center
@@ -141,7 +147,7 @@ export default {
   border-radius 20px
   background url("https://ethnomir.ru/upload/medialibrary/2d9/meduza.jpg") no-repeat center bottom
   cursor pointer
-  transition all .5s ease
+  transition all 1s
 
   &:hover {
     box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
@@ -172,7 +178,7 @@ export default {
       right 0
       width 60px
       height 40px
-      border-radius 10px
+      border-radius 5px
       background-color #fff
     }
 
@@ -244,11 +250,16 @@ export default {
   .front, .back {
     display block
     position relative
+    opacity 1
+  }
+
+  .back {
+    transform rotateY(180deg)
   }
 }
 
 .card.animate {
-  transition all .5s ease
+  transition all 1s
   transform rotateY(180deg)
 }
 
