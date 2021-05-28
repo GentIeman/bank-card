@@ -1,15 +1,15 @@
 <template>
-  <div>
+  <div class="main">
     <section class="card" :class="{'animate' : isShowCVV}">
       <div class="front">
         <div class="card__inner front" v-if="isShowCVV !== true">
           <figure class="card__chip">
             <img class="card__chip-img" src="@/assets/images/chip.png" alt="chip" width="55" height="42">
           </figure>
-          <div class="card__number number">
+            <div class="card__number number">
               <span v-if="cardNumber">{{ cardNumber }}</span>
               <span v-else> {{ defaultNumber }}</span>
-          </div>
+            </div>
           <div class="card__type-card">
             <svg style="fill: #0072FF" width="80px" height="80px" version="1.1" viewBox="0 0 64 64" xml:space="preserve"
                  xmlns="http://www.w3.org/2000/svg">
@@ -35,7 +35,7 @@
               <header class="user-data__header">
                 <p class="header">Expires</p>
               </header>
-              <p class="date">{{ cardMonth }} / {{ cardYear }}</p>
+              <p class="date">{{ cardMonth }} / {{ String(cardYear).slice(2,4) }}</p>
             </div>
           </div>
         </div>
@@ -111,6 +111,7 @@ export default {
     defaultUserName: 'Full Name',
     defaultDate: 'MM/YY',
     defaultCvv: '',
+    animate: true,
   }),
   computed: {
     cardNumberMask() {
@@ -121,14 +122,19 @@ export default {
 </script>
 
 <style scoped lang="stylus">
+
+.main {
+  display flex
+  justify-content space-between
+  align-items center
+  width 100%
+  height 100%
+  margin 0 80px
+}
 .card {
   display flex
   justify-content center
   align-items center
-  position absolute
-  top 50%
-  left 25%
-  transform translate(-50%, -50%)
   transform-style: preserve-3d;
   width 450px
   height 250px
@@ -250,10 +256,6 @@ export default {
   display flex
   justify-content center
   align-items center
-  position absolute
-  top 50%
-  left 70%
-  transform translate(-50%, -50%)
   width 500px
   height 500px
   border solid 1px #000
