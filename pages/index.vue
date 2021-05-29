@@ -12,19 +12,7 @@
               <p v-else> {{ defaultNumber }}</p>
             </div>
             <div class="card__type-card">
-              <svg style="fill: #0072FF" width="80px" height="80px" version="1.1" viewBox="0 0 64 64"
-                   xml:space="preserve"
-                   xmlns="http://www.w3.org/2000/svg">
-          <g id="GUIDES_64"/>
-                <g id="Layer_3"/>
-                <g id="Layer_2"><polygon class="st0" points="27.1,24.1 24.5,39.9 28.6,39.9 31.2,24.1 27.1,24.1  "/>
-                  <path class="st0"
-                        d="M50.8,24.1L50.8,24.1c-1,0-1.7,0.3-2.1,1.3L42.6,40h4.3c0,0,0.7-2,0.9-2.4c0.5,0,4.6,0,5.2,0   c0.1,0.6,0.5,2.4,0.5,2.4h3.8L54,24.1H50.8z M48.9,34.3c0.3-0.9,1.6-4.4,1.6-4.4c0,0,0.3-0.9,0.5-1.5l0,0l0.3,1.4   c0,0,0.8,3.8,1,4.6H48.9z"/>
-                  <path class="st0"
-                        d="M39.4,30.5c-1.4-0.7-2.3-1.2-2.3-2c0-0.7,0.7-1.4,2.3-1.4c1.3,0,2.3,0.3,3.1,0.6l0.4,0.2l0.6-3.4   c-0.8-0.3-2.1-0.7-3.7-0.7l0,0c-4,0-6.9,2.2-6.9,5.2c0,2.3,2,3.6,3.6,4.3c1.6,0.8,2.1,1.3,2.1,2c0,1.1-1.3,1.5-2.5,1.5   c-1.6,0-2.5-0.2-3.9-0.8l-0.5-0.3l-0.6,3.5c1,0.4,2.7,0.8,4.6,0.8c4.3,0,7.1-2.1,7.1-5.4C42.9,33,41.8,31.6,39.4,30.5z"/>
-                  <path class="st0"
-                        d="M21.1,24.1L21.1,24.1l-4,10.8l-0.4-2.2c0,0,0,0,0,0l-1.4-7.3c-0.2-1-1-1.3-1.9-1.3H6.9c-0.1,0-0.1,0.1-0.2,0.1   c0,0.1,0,0.2,0.1,0.2c1,0.3,1.9,0.6,2.7,1c0.9,0.4,1.5,1.2,1.8,2.1l3.3,12.4l4.3,0l6.4-15.8H21.1z"/></g>
-        </svg>
+              <!--              <img src='@/assets/icons/' alt="type-bank">-->
             </div>
             <div class="user-data">
               <div class="user-data__username">
@@ -40,9 +28,19 @@
                 <header class="user-data__header">
                   <p class="header">Expires</p>
                 </header>
-                <p class="date" v-if="cardMonth || cardYear">{{ cardMonth }} / {{ String(cardYear).slice(2, 4) }}</p>
-                <p class="date" v-else>{{ defaultDate }}</p>
-
+                <label>
+                  <span class="month" v-if="cardMonth" :key="cardMonth">
+                    {{ cardMonth }}
+                  </span>
+                  <span v-else class="month" key="2">MM</span>
+                </label>
+                <span class="slash">/</span>
+                <label>
+                  <span class="year" v-if="cardYear" :key="cardYear">
+                    {{ String(cardYear).slice(2, 4) }}
+                  </span>
+                  <span v-else class="year" key="2">YY</span>
+                </label>
               </div>
             </div>
           </div>
@@ -124,7 +122,7 @@ export default {
   computed: {
     cardNumberMask() {
       return this.cardMask;
-    }
+    },
   },
 }
 </script>
@@ -223,7 +221,7 @@ input::-webkit-inner-spin-button {
             letter-spacing 2px
           }
 
-          .username, .date {
+          .username, .month, .year, .slash {
             font normal 1.4em sans-serif
             color #fff
           }
@@ -266,11 +264,11 @@ input::-webkit-inner-spin-button {
       .front, .back {
         display block
         position relative
-        opacity 1
+        transform perspective(2000px) rotateY(0deg) rotateX(0deg) rotate(0deg);
       }
 
       .back {
-        transform rotateY(180deg)
+        transform perspective(2000px) rotateY(-180deg) rotateX(0deg) rotate(0deg);
       }
     }
 
@@ -382,6 +380,12 @@ input::-webkit-inner-spin-button {
   @media screen and (max-width 1920px ) {
     .container__inner {
       margin 0 300px
+    }
+  }
+
+  @media screen and (max-width 1440px ) {
+    .container__inner {
+      margin 0 80px
     }
   }
 }
