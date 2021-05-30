@@ -12,7 +12,7 @@
               <p v-else> {{ defaultNumber }}</p>
             </div>
             <div class="card__type-card">
-              <!--              <img src='@/assets/icons/' alt="type-bank">-->
+                <img :src="'/icons/' + getCardType + '.svg'" alt="type-bank" :key="getCardType">
             </div>
             <div class="user-data">
               <div class="user-data__username">
@@ -123,6 +123,16 @@ export default {
     cardNumberMask() {
       return this.cardMask;
     },
+    getCardType() {
+      let number = this.cardNumber;
+      let re = new RegExp("^4");
+      if (number.match(re) != null) return "visa"
+
+      re = new RegExp("^5[1-5]");
+      if (number.match(re) != null) return "mastercard"
+
+      return "visa"
+    }
   },
 }
 </script>
@@ -256,8 +266,16 @@ input::-webkit-inner-spin-button {
 
         .card__type-card {
           position absolute
-          top 0
+          top 20px
           right 0
+          width 80px
+          height 40px
+
+          img {
+            position absolute
+            width 100%
+            height 100%
+          }
         }
       }
 
