@@ -60,7 +60,7 @@
           <div class="block__content">
             <div class="block__form-card">
               <p class="block__form-header form-header">Card Number</p>
-              <input id="cardNumber" type="text" min="0" v-mask="cardNumberMask" class="form-card form-card-number"
+              <input id="cardNumber" type="text" v-mask="cardNumberMask" class="form-card form-card-number"
                      v-model="cardNumber"
                      placeholder="0000 0000 0000 0000">
             </div>
@@ -124,14 +124,22 @@ export default {
       return this.cardMask;
     },
     getCardType() {
-      let number = this.cardNumber;
-      let re = new RegExp("^4");
-      if (number.match(re) != null) return "visa"
-
-      re = new RegExp("^5[1-5]");
-      if (number.match(re) != null) return "mastercard"
-
-      return "visa"
+      let typeCard = ''
+      let patterns = [
+        {pattern: '^4', title: 'visa'},
+        {pattern: '^5', title: 'mastercard'},
+        {pattern: '^3', title: 'amex'},
+        {pattern: '^2', title: 'mir'}
+      ]
+      patterns.forEach((element) => {
+        let re = new RegExp(`${element.pattern}`)
+        if (this.cardNumber.match(re) != null) return typeCard = element.title
+      })
+      if (this.cardNumber == '') {
+        return 'visa'
+      } else {
+        return typeCard
+      }
     }
   },
 }
@@ -169,7 +177,8 @@ input::-webkit-inner-spin-button {
       width 450px
       height 250px
       border-radius 20px
-      background url("https://ethnomir.ru/upload/medialibrary/2d9/meduza.jpg") no-repeat center bottom
+      background url("https://cdn.igromania.ru/mnt/news/d/5/a/f/1/3/98053/0ff196ca20a579ea_1920xH.jpg") no-repeat center center
+      background-size cover
       cursor pointer
       transition all 1s
 
