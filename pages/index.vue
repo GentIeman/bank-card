@@ -2,8 +2,8 @@
   <div class="container">
     <div class="container__inner">
       <section class="card" :class="{'animate' : isShowCVV}">
-        <div class="front">
-          <div class="card__inner front" v-if="isShowCVV !== true">
+        <div class="front" v-if="isShowCVV !== true">
+          <div class="card__inner">
             <figure class="card__chip">
               <img class="card__chip-img" src="@/assets/images/chip.png" alt="chip" width="55" height="42">
             </figure>
@@ -45,8 +45,8 @@
             </div>
           </div>
         </div>
-        <div class="back">
-          <div class="card__inner" v-if="isShowCVV === true" :class="{'show-back' : isShowCVV}">
+        <div class="back" :class="{'show-back' : isShowCVV}">
+          <div class="card__inner" v-if="isShowCVV === true">
             <div class="card__line"></div>
             <div class="card__cvv-block">
               <p class="cvv" v-if="cardCVV">{{ cardCVV }}</p>
@@ -127,21 +127,17 @@ export default {
       let typeCard = ''
       let patterns = [
         {pattern: '^4', title: 'visa'},
-        {pattern: '^5', title: 'mastercard'},
+        {pattern: '^5[1-5]', title: 'mastercard'},
         {pattern: '^3', title: 'amex'},
-        {pattern: '^2', title: 'mir'}
+        {pattern: '^2[1-5]', title: 'mir'}
       ]
       patterns.forEach((element) => {
         let re = new RegExp(`${element.pattern}`)
         if (this.cardNumber.match(re) != null) return typeCard = element.title
       })
-      if (this.cardNumber == '') {
-        return 'visa'
-      } else {
-        return typeCard
-      }
+      return this.cardNumber === '' ? 'visa' :  typeCard
     }
-  },
+  }
 }
 </script>
 
@@ -176,11 +172,13 @@ input::-webkit-inner-spin-button {
       transform-style: preserve-3d;
       width 450px
       height 250px
+      position relative
       border-radius 20px
-      background url("https://cdn.igromania.ru/mnt/news/d/5/a/f/1/3/98053/0ff196ca20a579ea_1920xH.jpg") no-repeat center center
+      background url("https://i.pinimg.com/originals/ec/eb/79/eceb7990b39fa62d4189f57f2076712f.png") no-repeat center center
       background-size cover
       cursor pointer
       transition all 1s
+      overflow hidden
 
       &:hover {
         box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
@@ -194,12 +192,11 @@ input::-webkit-inner-spin-button {
         .card__line {
           position absolute
           top 30%
-          left 50%
-          transform translate(-50%, -50%)
-          width 112%
+          left 0
+          width 100%
           height 40px
           opacity 0.5
-          background-color #fff
+          background-color #000
         }
 
         .card__cvv-block {
@@ -207,8 +204,8 @@ input::-webkit-inner-spin-button {
           justify-content center
           align-items center
           position absolute
-          bottom 0
-          right 0
+          bottom 20px
+          right 20px
           width 60px
           height 40px
           border-radius 5px
@@ -289,13 +286,27 @@ input::-webkit-inner-spin-button {
       }
 
       .front, .back {
-        display block
+        display flex
+        justify-content center
+        align-items center
+        width 100%
+        height 100%
         position relative
-        transform perspective(2000px) rotateY(0deg) rotateX(0deg) rotate(0deg);
       }
 
       .back {
-        transform perspective(2000px) rotateY(-180deg) rotateX(0deg) rotate(0deg);
+        display none
+        transform perspective(2000px) rotateY(-180deg) rotateX(0deg) rotate(0deg)
+        background #ecf0f1
+      }
+
+      .back > .card__inner {
+        width 100%
+        height 100%
+      }
+
+      .back.show-back {
+        display flex
       }
     }
 
