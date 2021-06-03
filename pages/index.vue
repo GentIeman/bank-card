@@ -1,8 +1,8 @@
 <template>
   <div class="container">
     <div class="container__inner">
-      <section class="card" :class="{'animate' : isShowCVV}">
-        <div class="front" v-if="isShowCVV !== true">
+      <section class="card" :class="{'active': isShowCVV}">
+        <div class="card__side front">
           <div class="card__inner">
             <figure class="card__chip">
               <img class="card__chip-img" src="@/assets/images/chip.png" alt="chip" width="55" height="42">
@@ -12,7 +12,7 @@
               <p v-else> {{ defaultNumber }}</p>
             </div>
             <div class="card__type-card">
-                <img :src="'/icons/' + getCardType + '.svg'" alt="type-bank" :key="getCardType">
+              <img :src="'/icons/' + getCardType + '.svg'" alt="type-bank" :key="getCardType">
             </div>
             <div class="user-data">
               <div class="user-data__username">
@@ -45,13 +45,11 @@
             </div>
           </div>
         </div>
-        <div class="back" :class="{'show-back' : isShowCVV}">
-          <div class="card__inner" v-if="isShowCVV === true">
-            <div class="card__line"></div>
-            <div class="card__cvv-block">
-              <p class="cvv" v-if="cardCVV">{{ cardCVV }}</p>
-              <p class="cvv" v-else>{{ defaultCvv }}</p>
-            </div>
+        <div class="card__side back">
+          <div class="card__line"></div>
+          <div class="card__cvv-block">
+            <p class="cvv" v-if="cardCVV">{{ cardCVV }}</p>
+            <p class="cvv" v-else>{{ defaultCvv }}</p>
           </div>
         </div>
       </section>
@@ -135,7 +133,7 @@ export default {
         let re = new RegExp(`${element.pattern}`)
         if (this.cardNumber.match(re) != null) return typeCard = element.title
       })
-      return this.cardNumber === '' ? 'visa' :  typeCard
+      return this.cardNumber === '' ? 'visa' : typeCard
     }
   }
 }
@@ -169,25 +167,99 @@ input::-webkit-inner-spin-button {
       display flex
       justify-content center
       align-items center
-      transform-style: preserve-3d;
       width 450px
       height 250px
       position relative
-      border-radius 20px
-      background url("https://i.pinimg.com/originals/ec/eb/79/eceb7990b39fa62d4189f57f2076712f.png") no-repeat center center
-      background-size cover
-      cursor pointer
-      transition all 1s
-      overflow hidden
 
-      &:hover {
-        box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
-      }
+      &__side {
+        position absolute
+        width 100%
+        height 100%
+        background url("https://i.pinimg.com/originals/ec/eb/79/eceb7990b39fa62d4189f57f2076712f.png") no-repeat center center
+        background-size cover
+        border-radius 20px
+        cursor pointer
+        transform: perspective(2000px) rotateY(0deg) rotateX(0deg) rotate(0deg);
+        transform-style: preserve-3d;
+        transition: all 0.8s cubic-bezier(0.71, 0.03, 0.56, 0.85);
+        backface-visibility: hidden;
 
-      &__inner {
-        position relative
-        width 400px
-        height 200px
+        &:hover {
+          box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
+        }
+
+        .card__inner {
+          position relative
+          width 400px
+          height 200px
+
+          .user-data {
+            display flex
+            justify-content space-between
+            align-items center
+            position absolute
+            bottom 0
+            left 0
+            width 100%
+            height auto
+
+            &__header {
+              position relative
+            }
+
+            .header {
+              font normal 1em sans-serif
+              color #838383
+              letter-spacing 2px
+            }
+
+            .username, .month, .year, .slash {
+              font normal 1.4em sans-serif
+              color #fff
+            }
+          }
+
+          .card__chip {
+            position absolute
+            top 20px
+            left 0
+          }
+
+          .card__number {
+            display flex
+            justify-content center
+            align-items center
+            position absolute
+            top 55%
+            left 50%
+            transform translate(-50%, -50%)
+            width 100%
+
+            &:focus {
+              border solid 1px red
+            }
+          }
+
+          .number {
+            font normal 1.7em sans-serif
+            color #fff
+            letter-spacing 3px
+          }
+
+          .card__type-card {
+            position absolute
+            top 20px
+            right 0
+            width 80px
+            height 40px
+
+            img {
+              position absolute
+              width 100%
+              height 100%
+            }
+          }
+        }
 
         .card__line {
           position absolute
@@ -216,103 +288,30 @@ input::-webkit-inner-spin-button {
           font normal 1.7em sans-serif
           color #838383
         }
-
-        .user-data {
-          display flex
-          justify-content space-between
-          align-items center
-          position absolute
-          bottom 0
-          left 0
-          width 100%
-          height auto
-
-          &__header {
-            position relative
-          }
-
-          .header {
-            font normal 1em sans-serif
-            color #838383
-            letter-spacing 2px
-          }
-
-          .username, .month, .year, .slash {
-            font normal 1.4em sans-serif
-            color #fff
-          }
-        }
-
-        .card__chip {
-          position absolute
-          top 20px
-          left 0
-        }
-
-        .card__number {
-          display flex
-          justify-content center
-          align-items center
-          position absolute
-          top 55%
-          left 50%
-          transform translate(-50%, -50%)
-          width 100%
-
-          &:focus {
-            border solid 1px red
-          }
-        }
-
-        .number {
-          font normal 1.7em sans-serif
-          color #fff
-          letter-spacing 3px
-        }
-
-        .card__type-card {
-          position absolute
-          top 20px
-          right 0
-          width 80px
-          height 40px
-
-          img {
-            position absolute
-            width 100%
-            height 100%
-          }
-        }
       }
 
       .front, .back {
         display flex
         justify-content center
         align-items center
-        width 100%
-        height 100%
-        position relative
-      }
-
-      .back {
-        display none
-        transform perspective(2000px) rotateY(-180deg) rotateX(0deg) rotate(0deg)
-        background #ecf0f1
-      }
-
-      .back > .card__inner {
+        position absolute
         width 100%
         height 100%
       }
 
-      .back.show-back {
-        display flex
+      &__side.back {
+        transform: rotateY(180deg);
       }
     }
 
-    .card.animate {
-      transition all 1s
-      transform rotateY(180deg)
+    .active {
+      .front {
+        transform: perspective(1000px) rotateY(180deg) rotateX(0deg) rotateZ(0deg);
+      }
+
+      .back {
+        transform: perspective(1000px) rotateY(0) rotateX(0deg) rotateZ(0deg);
+      }
     }
 
     .block {
