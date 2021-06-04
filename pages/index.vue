@@ -122,18 +122,28 @@ export default {
       return this.cardMask;
     },
     getCardType() {
-      let typeCard = ''
-      let patterns = [
-        {pattern: '^4', title: 'visa'},
-        {pattern: '^5[1-5]', title: 'mastercard'},
-        {pattern: '^3', title: 'amex'},
-        {pattern: '^2[1-5]', title: 'mir'}
-      ]
-      patterns.forEach((element) => {
-        let re = new RegExp(`${element.pattern}`)
-        if (this.cardNumber.match(re) != null) return typeCard = element.title
-      })
-      return this.cardNumber === '' ? 'visa' : typeCard
+      let re  = new RegExp('^4')
+      if (this.cardNumber.match(re) !== null) return 'visa'
+
+      re = new RegExp('^5[1-5]')
+      if (this.cardNumber.match(re) !== null) return 'mastercard'
+
+      re  = new RegExp('^2[1-5]')
+      if (this.cardNumber.match(re) !== null) return 'mir'
+
+      return 'visa'
+      // let typeCard = ''
+      // let patterns = [
+      //   {pattern: '^4', title: 'visa'},
+      //   {pattern: '^5[1-5]', title: 'mastercard'},
+      //   {pattern: '^3', title: 'amex'},
+      //   {pattern: '^2[1-5]', title: 'mir'}
+      // ]
+      // patterns.forEach((element) => {
+      //   let re = new RegExp(`${element.pattern}`)
+      //   if (this.cardNumber.match(re) != null) return typeCard = element.title
+      // })
+      // return this.cardNumber === '' ? 'visa' : typeCard
     }
   }
 }
@@ -175,7 +185,7 @@ input::-webkit-inner-spin-button {
         position absolute
         width 100%
         height 100%
-        background url("https://i.pinimg.com/originals/ec/eb/79/eceb7990b39fa62d4189f57f2076712f.png") no-repeat center center
+        background url("https://images.pexels.com/photos/743986/pexels-photo-743986.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940") no-repeat center center
         background-size cover
         border-radius 20px
         cursor pointer
@@ -234,10 +244,6 @@ input::-webkit-inner-spin-button {
             left 50%
             transform translate(-50%, -50%)
             width 100%
-
-            &:focus {
-              border solid 1px red
-            }
           }
 
           .number {
@@ -255,15 +261,15 @@ input::-webkit-inner-spin-button {
 
             img {
               position absolute
-              width 100%
-              height 100%
+              max-width 100%
+              max-height 100%
             }
           }
         }
 
         .card__line {
           position absolute
-          top 30%
+          top 20%
           left 0
           width 100%
           height 40px
