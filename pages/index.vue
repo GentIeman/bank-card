@@ -7,10 +7,10 @@
             <figure class="card__chip">
               <img class="card__chip-img" src="@/assets/images/chip.png" alt="chip" width="55" height="42">
             </figure>
-            <div class="card__number number">
-              <p v-if="cardNumber">{{ cardNumber }}</p>
-              <p v-else> {{ defaultNumber }}</p>
-            </div>
+              <div class="card__number number" ref="cardNumber" :class="{'card__number_focus': isFocusElement == true}"> <!-- :class="{'card__number_focus' : cardNumber}" -->
+                  <p v-if="cardNumber">{{ cardNumber }}</p>
+                  <p v-else> {{ defaultNumber }}</p>
+              </div>
             <div class="card__type-card">
               <img :src="'/icons/' + getCardType + '.svg'" alt="type-bank" :key="getCardType">
             </div>
@@ -19,11 +19,9 @@
                 <header class="user-data__header">
                   <p class="header">Card Holder</p>
                 </header>
-                <transition name="slide-fade-up">
                   <p v-if="cardHolders" class="username">{{ cardHolders }}</p>
                   <p v-else class="username">{{ defaultUserName }}</p>
-                </transition>
-              </div>
+               </div>
               <div class="user-data__date">
                 <header class="user-data__header">
                   <p class="header">Expires</p>
@@ -60,7 +58,7 @@
               <p class="block__form-header form-header">Card Number</p>
               <input id="cardNumber" type="text" v-mask="cardNumberMask" class="form-card form-card-number"
                      v-model="cardNumber"
-                     placeholder="0000 0000 0000 0000">
+                     placeholder="0000 0000 0000 0000" @focus="isFocusElement = true" @blur="isFocusElement = false">
             </div>
             <div class="block__form-card">
               <p class="block__form-header form-header">Card Holders</p>
@@ -115,20 +113,20 @@ export default {
     defaultUserName: 'Full Name',
     defaultDate: 'MM/YY',
     defaultCvv: '***',
-    animate: true,
+    isFocusElement: false
   }),
   computed: {
     cardNumberMask() {
       return this.cardMask;
     },
     getCardType() {
-      let re  = new RegExp('^4')
+      let re = new RegExp('^4')
       if (this.cardNumber.match(re) !== null) return 'visa'
 
       re = new RegExp('^5[1-5]')
       if (this.cardNumber.match(re) !== null) return 'mastercard'
 
-      re  = new RegExp('^2[1-5]')
+      re = new RegExp('^2[1-5]')
       if (this.cardNumber.match(re) !== null) return 'mir'
 
       return 'visa'
@@ -185,7 +183,7 @@ input::-webkit-inner-spin-button {
         position absolute
         width 100%
         height 100%
-        background url("https://images.pexels.com/photos/743986/pexels-photo-743986.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940") no-repeat center center
+        background url("https://cdn.hipwallpaper.com/m/67/14/JnPeos.jpg") no-repeat center center
         background-size cover
         border-radius 20px
         cursor pointer
@@ -244,6 +242,10 @@ input::-webkit-inner-spin-button {
             left 50%
             transform translate(-50%, -50%)
             width 100%
+          }
+
+          .card__number_focus {
+            border: solid 1px red
           }
 
           .number {
@@ -431,5 +433,44 @@ input::-webkit-inner-spin-button {
       margin 0 80px
     }
   }
+}
+
+.card-element_focus {
+  position: absolute;
+  z-index: 3;
+  border-radius: 5px;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  transition: all 0.35s cubic-bezier(0.71, 0.03, 0.56, 0.85);
+  opacity: 0;
+  pointer-events: none;
+  overflow: hidden;
+  border: 2px solid rgba(255, 255, 255, 0.65);
+
+  &:after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background: rgb(8, 20, 47);
+    height: 100%;
+    border-radius: 5px;
+    filter: blur(25px);
+    opacity: 0.5;
+  }
+}
+
+.-active {
+  opacity 1
+}
+
+.fade-slide-up-active, .fade-slide-up-active {
+  transition: opacity .5s;
+}
+.fade-slide-enter, .fade-slide-up-leave-to /* .fade-leave-active до версии 2.1.8 */ {
+  opacity: 0;
 }
 </style>
