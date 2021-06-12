@@ -7,10 +7,10 @@
             <figure class="card__chip">
               <img class="card__chip-img" src="@/assets/images/chip.png" alt="chip" width="55" height="42">
             </figure>
-              <div class="card__number number" ref="cardNumber" :class="{'card__number_focus': isFocusElement == true}"> <!-- :class="{'card__number_focus' : cardNumber}" -->
-                  <p v-if="cardNumber">{{ cardNumber }}</p>
-                  <p v-else> {{ defaultNumber }}</p>
-              </div>
+            <div class="card__number number" ref="cardNumber" :class="{'card__number_focus' : focusCardNumber}">
+              <p v-if="cardNumber">{{ cardNumber }}</p>
+              <p v-else> {{ defaultNumber }}</p>
+            </div>
             <div class="card__type-card">
               <img :src="'/icons/' + getCardType + '.svg'" alt="type-bank" :key="getCardType">
             </div>
@@ -19,26 +19,30 @@
                 <header class="user-data__header">
                   <p class="header">Card Holder</p>
                 </header>
+                <div class="user-data__holder" :class="{'user-data__holder_focus' : focusCardHolders}">
                   <p v-if="cardHolders" class="username">{{ cardHolders }}</p>
                   <p v-else class="username">{{ defaultUserName }}</p>
-               </div>
+                </div>
+              </div>
               <div class="user-data__date">
                 <header class="user-data__header">
                   <p class="header">Expires</p>
                 </header>
-                <label>
+                <div class="user-data__date-inner" :class="{'user-data__date-inner_focus' : focusCardDate}">
+                  <label>
                   <span class="month" v-if="cardMonth" :key="cardMonth">
                     {{ cardMonth }}
                   </span>
-                  <span v-else class="month" key="2">MM</span>
-                </label>
-                <span class="slash">/</span>
-                <label>
+                    <span v-else class="month" key="2">MM</span>
+                  </label>
+                  <span class="slash">/</span>
+                  <label>
                   <span class="year" v-if="cardYear" :key="cardYear">
                     {{ String(cardYear).slice(2, 4) }}
                   </span>
-                  <span v-else class="year" key="2">YY</span>
-                </label>
+                    <span v-else class="year" key="2">YY</span>
+                  </label>
+                </div>
               </div>
             </div>
           </div>
@@ -58,23 +62,25 @@
               <p class="block__form-header form-header">Card Number</p>
               <input id="cardNumber" type="text" v-mask="cardNumberMask" class="form-card form-card-number"
                      v-model="cardNumber"
-                     placeholder="0000 0000 0000 0000" @focus="isFocusElement = true" @blur="isFocusElement = false">
+                     placeholder="0000 0000 0000 0000" @focus="focusCardNumber = true" @blur="focusCardNumber = false">
             </div>
             <div class="block__form-card">
               <p class="block__form-header form-header">Card Holders</p>
               <input id="userName" type="text" class="form-card form-card-username" v-model="cardHolders"
-                     placeholder="Josh Smith">
+                     placeholder="Josh Smith" @focus="focusCardHolders = true" @blur="focusCardHolders = false">
             </div>
             <div class="block__form-card form-card-date">
               <p class="block__form-header form-header">Expiration Date</p>
               <div class="block__form-date">
-                <select class="form-card form-card-month" v-model="cardMonth">
+                <select class="form-card form-card-month" v-model="cardMonth" @focus="focusCardDate = true"
+                        @blur="focusCardDate = false">
                   <option value="" disabled selected>Month</option>
                   <option :value="n < 10 ? '0' + n : n" v-for="n in 12" :key="n">
                     {{ n < 10 ? '0' + n : n }}
                   </option>
                 </select>
-                <select class="form-card form-card-year" v-model="cardYear">
+                <select class="form-card form-card-year" v-model="cardYear" @focus="focusCardDate = true"
+                        @blur="focusCardDate = false">
                   <option value="" disabled selected>Year</option>
                   <option :value="$index + minCardYear" v-for="(n, $index) in 12" :key="n">
                     {{ $index + minCardYear }}
@@ -113,7 +119,9 @@ export default {
     defaultUserName: 'Full Name',
     defaultDate: 'MM/YY',
     defaultCvv: '***',
-    isFocusElement: false
+    focusCardNumber: false,
+    focusCardHolders: false,
+    focusCardDate: false
   }),
   computed: {
     cardNumberMask() {
@@ -183,7 +191,7 @@ input::-webkit-inner-spin-button {
         position absolute
         width 100%
         height 100%
-        background url("https://cdn.hipwallpaper.com/m/67/14/JnPeos.jpg") no-repeat center center
+        background url("https://habrastorage.org/files/161/60c/b34/16160cb34a7342ae84ffa48a39b8a298.png") no-repeat center center
         background-size cover
         border-radius 20px
         cursor pointer
@@ -242,10 +250,6 @@ input::-webkit-inner-spin-button {
             left 50%
             transform translate(-50%, -50%)
             width 100%
-          }
-
-          .card__number_focus {
-            border: solid 1px red
           }
 
           .number {
@@ -435,42 +439,9 @@ input::-webkit-inner-spin-button {
   }
 }
 
-.card-element_focus {
-  position: absolute;
-  z-index: 3;
-  border-radius: 5px;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  transition: all 0.35s cubic-bezier(0.71, 0.03, 0.56, 0.85);
-  opacity: 0;
-  pointer-events: none;
-  overflow: hidden;
-  border: 2px solid rgba(255, 255, 255, 0.65);
-
-  &:after {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    background: rgb(8, 20, 47);
-    height: 100%;
-    border-radius: 5px;
-    filter: blur(25px);
-    opacity: 0.5;
-  }
+.card__number_focus, .user-data__holder_focus, .user-data__date-inner_focus {
+  transition border .3s ease
+  border: solid 2px #838383
 }
 
-.-active {
-  opacity 1
-}
-
-.fade-slide-up-active, .fade-slide-up-active {
-  transition: opacity .5s;
-}
-.fade-slide-enter, .fade-slide-up-leave-to /* .fade-leave-active до версии 2.1.8 */ {
-  opacity: 0;
-}
 </style>
