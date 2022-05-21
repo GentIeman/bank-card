@@ -90,3 +90,6 @@ sw.*
 *.swp
 
 /node_modules
+
+# Files
+*.css
