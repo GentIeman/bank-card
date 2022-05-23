@@ -1,0 +1,47 @@
+.medium-text {
+  font-style(normal, 1.4rem, false, #fff)
+}
+
+.label-text {
+  font-style(normal, 1rem, false, #333)
+}
+
+.reply {
+  padding 5px 10px
+  font-style(normal, .9rem, Roboto, #333)
+  outline none
+  transition border .2s linear
+  cursor pointer
+
+  &:is(&_hover:hover, &_focus:focus, &_active:active) {
+    border solid 2px var(--accent-color)
+  }
+}
+
+.select {
+  padding 5px 10px
+  font-style(normal, .9rem, Roboto, #333)
+  outline none
+  transition box-shadow .2s linear
+  cursor pointer
+
+  &:is(&_hover:hover, &_focus:focus, &_active:active) {
+    box-shadow 0 0 0 1px var(--accent-color)
+  }
+}
+
+.submit {
+  padding 10px 25px
+  outline none
+  cursor pointer
+  background none
+  color var(--accent-color)
+  border solid 2px var(--accent-color)
+  transition all .2s linear
+  border-radius 5px
+
+  &:is(&_hover:hover, &_focus:focus, &_active:active) {
+    background-color var(--accent-color)
+    color var(--text-color-wt)
+  }
+}

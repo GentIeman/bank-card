@@ -1,0 +1,18 @@
+@import "mixins.styl"
+@import "global.styl"
+
+:root {
+  --text-color-wt #fff
+  --accent-color #3498db
+}
+
+:where(*) {
+  margin 0
+  padding 0
+  box-sizing border-box
+}
+
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance none
+}
