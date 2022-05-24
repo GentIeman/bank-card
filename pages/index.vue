@@ -5,7 +5,14 @@
         <section class="card__side card__side_front">
           <header class="card__header">
             <figure class="card__chip"></figure>
-            <figure class="card__payment-system"></figure>
+            <figure class="card__payment-system">
+              <img :src="'/icons/' + gettingPaymentSystem + '.svg'"
+                   alt="Payment system"
+                   class="card__payment-system_icon"
+                   width="80"
+                   height="40"
+              >
+            </figure>
           </header>
           <div class="card__number-wrap">
             <p class="card__number">#### #### #### ####</p>
@@ -89,19 +96,13 @@ export default {
     cardHolder: null
   }),
   computed: {
-    cardNumberMask() {
-      return this.cardMask;
-    },
-    getCardType() {
+    gettingPaymentSystem() {
       let re = new RegExp('^4')
       if (this.cardNumber.match(re) !== null) return 'visa'
-
       re = new RegExp('^5[1-5]')
       if (this.cardNumber.match(re) !== null) return 'mastercard'
-
       re = new RegExp('^2[1-5]')
       if (this.cardNumber.match(re) !== null) return 'mir'
-
       return 'visa'
       // let typeCard = ''
       // let patterns = [
