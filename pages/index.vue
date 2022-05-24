@@ -168,7 +168,7 @@ export default {
       width inherit
       height inherit
       border-radius 20px
-      background url("https://habrastorage.org/files/161/60c/b34/16160cb34a7342ae84ffa48a39b8a298.png") no-repeat center / cover
+      background url("@/static/img/background.png") no-repeat center / cover
       transform perspective(2000px) rotateY(0deg) rotateX(0deg) rotate(0deg)
       transform-style preserve-3d
       backface-visibility hidden
