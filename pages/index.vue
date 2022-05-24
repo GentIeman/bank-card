@@ -111,9 +111,16 @@
 export default {
   data: () => ({
     currentYear: new Date().getFullYear(),
-    cardNumber: null,
-    cardCVV: null,
-    cardHolder: null
+    cardNumber: "",
+    cardCVV: "",
+    cardHolder: "",
+    month: "",
+    year: "",
+    cardMask: "#### #### #### ####",
+    isShowCVV: false,
+    isFocusOnCardNumber: false,
+    isFocusOnCardHolder: false,
+    isFocusOnExpiresDate: false
   }),
   computed: {
     gettingPaymentSystem() {
