@@ -15,23 +15,29 @@
             </figure>
           </header>
           <div class="card__number-wrap">
-            <p class="card__number">#### #### #### ####</p>
+            <p class="card__number"
+               :class="{'card__number_active': isFocusOnCardNumber}">
+              {{ gettingCardNumber }}
+            </p>
           </div>
           <footer class="card__footer">
             <div class="card__holder">
               <p class="card__subtitle">Card Holder</p>
-              <p class="card__full-name medium-text">Full Name</p>
+              <p class="card__full-name medium-text"
+                 :class="{'card__full-name_active': isFocusOnCardHolder}">
+                {{ gettingCardHolder }}
+              </p>
             </div>
             <div class="card__expires">
               <p class="card__subtitle">Expires</p>
-              <time class="card__life-time medium-text">MM/YY</time>
+              <time class="card__life-time medium-text" :class="{'card__life-time_active': isFocusOnExpiresDate}">{{ gettingMonth }} / {{ gettingYear }}</time>
             </div>
           </footer>
         </section>
         <section class="card__side card__side_back">
           <div class="card__line"></div>
-          <div class="card__cvv-wrap">
-            <p class="card__cvv">CVV</p>
+          <div class="card__cvv-wrap" :class="{'card__cvv-wrap_active': isShowCVV}">
+            <p class="card__cvv">{{ gettingCardCVV }}</p>
           </div>
         </section>
       </section>
@@ -41,18 +47,27 @@
                maxlength="16"
                v-model="cardNumber"
                class="filling-form__reply reply reply_focus reply_hover reply_active"
-               v-maxlength="16">
+               @focus="isFocusOnCardNumber = true"
+               @blur="isFocusOnCardNumber = false">
       </label>
       <label for="" class="filling-form__label label-text">Card Holders
         <input type="text"
                placeholder="Josh Smith"
                maxlength="40"
                class="filling-form__reply reply reply_focus reply_hover reply_active"
-               v-model="cardHolder">
+               v-model="cardHolder"
+               @focus="isFocusOnCardHolder = true"
+               @blur="isFocusOnCardHolder = false">
       </label>
       <div class="filling-form__expiration-wrap">
-        <label for="" class="filling-form__label filling-form__label_row label-text">Expiration Date</label>
-        <select class="filling-form__select select select_focus select_hover select_active">
+        <label for=""
+               class="filling-form__label filling-form__label_row label-text">
+          Expiration Date
+        </label>
+        <select class="filling-form__select select select_focus select_hover select_active"
+                v-model="month"
+                @focus="isFocusOnExpiresDate = true"
+                @blur="isFocusOnExpiresDate = false">
           <option value=""
                   disabled
                   selected>Month
@@ -63,7 +78,10 @@
             {{ month < 10 ? "0" + month : month }}
           </option>
         </select>
-        <select class="filling-form__select select select_focus select_hover select_active">
+        <select class="filling-form__select select select_focus select_hover select_active"
+                v-model="year"
+                @focus="isFocusOnExpiresDate = true"
+                @blur="isFocusOnExpiresDate = false">
           <option value=""
                   disabled
                   selected>Year
@@ -80,7 +98,9 @@
                placeholder="123"
                class="filling-form__reply reply reply_focus reply_hover reply_active"
                v-model="cardCVV"
-               v-maxlength="3">
+               v-maxlength="3"
+               @focus="isShowCVV = true"
+               @blur="isShowCVV = false">
       </label>
       <button type="submit" class="filling-form__submit submit submit_focus submit_active submit_hover">Submit</button>
     </form>
@@ -263,6 +283,14 @@ export default {
     &__cvv {
       margin auto
       font-style(normal, 1.7rem, false, #838383)
+    }
+
+    &__number_active,
+    &__full-name_active,
+    &__life-time_active,
+    &__cvv-wrap_active {
+      transition box-shadow .2s linear
+      box-shadow 0 0 0 2px var(--accent-color)
     }
   }
 }
