@@ -1,7 +1,7 @@
 <template>
   <section class="page">
     <form class="filling-form">
-      <section class="card">
+      <section class="card" :class="{'card_flip': isShowCVV}">
         <section class="card__side card__side_front">
           <header class="card__header">
             <figure class="card__chip"></figure>
@@ -44,7 +44,7 @@
       <label for="" class="filling-form__label label-text">Card Number
         <input type="text"
                placeholder="0000 0000 0000 0000"
-               maxlength="16"
+               v-mask="cardMask"
                v-model="cardNumber"
                class="filling-form__reply reply reply_focus reply_hover reply_active"
                @focus="isFocusOnCardNumber = true"
@@ -53,7 +53,7 @@
       <label for="" class="filling-form__label label-text">Card Holders
         <input type="text"
                placeholder="Josh Smith"
-               maxlength="40"
+               maxlength="30"
                class="filling-form__reply reply reply_focus reply_hover reply_active"
                v-model="cardHolder"
                @focus="isFocusOnCardHolder = true"
@@ -219,9 +219,7 @@ export default {
       }
     }
 
-    /*Test animation*/
-
-    &:hover {
+    &_flip {
       .card__side_front {
         transform perspective(1000px) rotateY(180deg)
       }
@@ -242,12 +240,6 @@ export default {
       width 55px
       height 40px
       background no-repeat center / 100% url("@/static/img/chip.png")
-    }
-
-    &__payment-system {
-      width 80px
-      height 40px
-      background no-repeat center / contain url("@/static/icons/mastercard.svg")
     }
 
     &__number-wrap {
@@ -276,7 +268,7 @@ export default {
 
     &__line {
       position relative
-      top 30px
+      top 40px
       width 100%
       height 40px
       background-color #000
