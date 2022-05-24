@@ -1,51 +1,73 @@
 <template>
   <section class="page">
     <form class="filling-form">
-      <section class="card">
+      <section class="card" :class="{'card_flip': isShowCVV}">
         <section class="card__side card__side_front">
           <header class="card__header">
             <figure class="card__chip"></figure>
-            <figure class="card__payment-system"></figure>
+            <figure class="card__payment-system">
+              <img :src="'/icons/' + gettingPaymentSystem + '.svg'"
+                   alt="Payment system"
+                   class="card__payment-system_icon"
+                   width="80"
+                   height="40"
+              >
+            </figure>
           </header>
           <div class="card__number-wrap">
-            <p class="card__number">#### #### #### ####</p>
+            <p class="card__number"
+               :class="{'card__number_active': isFocusOnCardNumber}">
+              {{ gettingCardNumber }}
+            </p>
           </div>
           <footer class="card__footer">
             <div class="card__holder">
               <p class="card__subtitle">Card Holder</p>
-              <p class="card__full-name medium-text">Full Name</p>
+              <p class="card__full-name medium-text"
+                 :class="{'card__full-name_active': isFocusOnCardHolder}">
+                {{ gettingCardHolder }}
+              </p>
             </div>
             <div class="card__expires">
               <p class="card__subtitle">Expires</p>
-              <time class="card__life-time medium-text">MM/YY</time>
+              <time class="card__life-time medium-text" :class="{'card__life-time_active': isFocusOnExpiresDate}">{{ gettingMonth }} / {{ gettingYear }}</time>
             </div>
           </footer>
         </section>
         <section class="card__side card__side_back">
           <div class="card__line"></div>
-          <div class="card__cvv-wrap">
-            <p class="card__cvv">CVV</p>
+          <div class="card__cvv-wrap" :class="{'card__cvv-wrap_active': isShowCVV}">
+            <p class="card__cvv">{{ gettingCardCVV }}</p>
           </div>
         </section>
       </section>
       <label for="" class="filling-form__label label-text">Card Number
         <input type="text"
                placeholder="0000 0000 0000 0000"
-               maxlength="16"
+               v-mask="cardMask"
                v-model="cardNumber"
                class="filling-form__reply reply reply_focus reply_hover reply_active"
-               v-maxlength="16">
+               @focus="isFocusOnCardNumber = true"
+               @blur="isFocusOnCardNumber = false">
       </label>
       <label for="" class="filling-form__label label-text">Card Holders
         <input type="text"
                placeholder="Josh Smith"
-               maxlength="40"
+               maxlength="30"
                class="filling-form__reply reply reply_focus reply_hover reply_active"
-               v-model="cardHolder">
+               v-model="cardHolder"
+               @focus="isFocusOnCardHolder = true"
+               @blur="isFocusOnCardHolder = false">
       </label>
       <div class="filling-form__expiration-wrap">
-        <label for="" class="filling-form__label filling-form__label_row label-text">Expiration Date</label>
-        <select class="filling-form__select select select_focus select_hover select_active">
+        <label for=""
+               class="filling-form__label filling-form__label_row label-text">
+          Expiration Date
+        </label>
+        <select class="filling-form__select select select_focus select_hover select_active"
+                v-model="month"
+                @focus="isFocusOnExpiresDate = true"
+                @blur="isFocusOnExpiresDate = false">
           <option value=""
                   disabled
                   selected>Month
@@ -56,7 +78,10 @@
             {{ month < 10 ? "0" + month : month }}
           </option>
         </select>
-        <select class="filling-form__select select select_focus select_hover select_active">
+        <select class="filling-form__select select select_focus select_hover select_active"
+                v-model="year"
+                @focus="isFocusOnExpiresDate = true"
+                @blur="isFocusOnExpiresDate = false">
           <option value=""
                   disabled
                   selected>Year
@@ -73,7 +98,9 @@
                placeholder="123"
                class="filling-form__reply reply reply_focus reply_hover reply_active"
                v-model="cardCVV"
-               v-maxlength="3">
+               v-maxlength="3"
+               @focus="isShowCVV = true"
+               @blur="isShowCVV = false">
       </label>
       <button type="submit" class="filling-form__submit submit submit_focus submit_active submit_hover">Submit</button>
     </form>
@@ -84,37 +111,46 @@
 export default {
   data: () => ({
     currentYear: new Date().getFullYear(),
-    cardNumber: null,
-    cardCVV: null,
-    cardHolder: null
+    cardNumber: "",
+    cardCVV: "",
+    cardHolder: "",
+    month: "",
+    year: "",
+    cardMask: "#### #### #### ####",
+    isShowCVV: false,
+    isFocusOnCardNumber: false,
+    isFocusOnCardHolder: false,
+    isFocusOnExpiresDate: false
   }),
   computed: {
-    cardNumberMask() {
-      return this.cardMask;
-    },
-    getCardType() {
+    gettingPaymentSystem() {
       let re = new RegExp('^4')
       if (this.cardNumber.match(re) !== null) return 'visa'
-
       re = new RegExp('^5[1-5]')
       if (this.cardNumber.match(re) !== null) return 'mastercard'
-
       re = new RegExp('^2[1-5]')
       if (this.cardNumber.match(re) !== null) return 'mir'
-
       return 'visa'
-      // let typeCard = ''
-      // let patterns = [
-      //   {pattern: '^4', title: 'visa'},
-      //   {pattern: '^5[1-5]', title: 'mastercard'},
-      //   {pattern: '^3', title: 'amex'},
-      //   {pattern: '^2[1-5]', title: 'mir'}
-      // ]
-      // patterns.forEach((element) => {
-      //   let re = new RegExp(`${element.pattern}`)
-      //   if (this.cardNumber.match(re) != null) return typeCard = element.title
-      // })
-      // return this.cardNumber === '' ? 'visa' : typeCard
+    },
+    gettingCardNumber() {
+      return (this.cardNumber.length === 0) ? "#### #### #### ####" : this.cardNumber
+    },
+    gettingCardCVV() {
+      return (this.cardCVV.length === 0) ? "***" : this.cardCVV
+    },
+    gettingCardHolder() {
+      return (this.cardHolder.length === 0) ? "Full Name" : this.cardHolder
+    },
+    gettingMonth() {
+      return (this.month.length === 0) ? "MM" : this.month
+    },
+    gettingYear() {
+      return (this.year.length === 0) ? "YY" : String(this.year).slice(2, 4)
+    }
+  },
+  watch: {
+    cardHolder() {
+      this.cardHolder = this.cardHolder.replace(/[^a-z\s]/gi, "")
     }
   }
 }
@@ -168,7 +204,7 @@ export default {
       width inherit
       height inherit
       border-radius 20px
-      background url("https://habrastorage.org/files/161/60c/b34/16160cb34a7342ae84ffa48a39b8a298.png") no-repeat center / cover
+      background url("@/static/img/background.png") no-repeat center / cover
       transform perspective(2000px) rotateY(0deg) rotateX(0deg) rotate(0deg)
       transform-style preserve-3d
       backface-visibility hidden
@@ -183,9 +219,7 @@ export default {
       }
     }
 
-    /*Test animation*/
-
-    &:hover {
+    &_flip {
       .card__side_front {
         transform perspective(1000px) rotateY(180deg)
       }
@@ -206,12 +240,6 @@ export default {
       width 55px
       height 40px
       background no-repeat center / 100% url("@/static/img/chip.png")
-    }
-
-    &__payment-system {
-      width 80px
-      height 40px
-      background no-repeat center / contain url("@/static/icons/mastercard.svg")
     }
 
     &__number-wrap {
@@ -240,7 +268,7 @@ export default {
 
     &__line {
       position relative
-      top 30px
+      top 40px
       width 100%
       height 40px
       background-color #000
@@ -262,6 +290,14 @@ export default {
     &__cvv {
       margin auto
       font-style(normal, 1.7rem, false, #838383)
+    }
+
+    &__number_active,
+    &__full-name_active,
+    &__life-time_active,
+    &__cvv-wrap_active {
+      transition box-shadow .2s linear
+      box-shadow 0 0 0 2px var(--accent-color)
     }
   }
 }
