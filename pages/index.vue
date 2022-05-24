@@ -1,7 +1,8 @@
 <template>
   <section class="page">
     <form class="filling-form">
-      <section class="card" :class="{'card_flip': isShowCVV}">
+      <section class="card"
+               :class="{'card_flip': isShowCVV}">
         <section class="card__side card__side_front">
           <header class="card__header">
             <figure class="card__chip"></figure>
@@ -30,18 +31,23 @@
             </div>
             <div class="card__expires">
               <p class="card__subtitle">Expires</p>
-              <time class="card__life-time medium-text" :class="{'card__life-time_active': isFocusOnExpiresDate}">{{ gettingMonth }} / {{ gettingYear }}</time>
+              <time class="card__life-time medium-text"
+                    :class="{'card__life-time_active': isFocusOnExpiresDate}">
+                {{ gettingMonth }} / {{ gettingYear }}
+              </time>
             </div>
           </footer>
         </section>
         <section class="card__side card__side_back">
           <div class="card__line"></div>
-          <div class="card__cvv-wrap" :class="{'card__cvv-wrap_active': isShowCVV}">
+          <div class="card__cvv-wrap"
+               :class="{'card__cvv-wrap_active': isShowCVV}">
             <p class="card__cvv">{{ gettingCardCVV }}</p>
           </div>
         </section>
       </section>
-      <label for="" class="filling-form__label label-text">Card Number
+      <label for=""
+             class="filling-form__label label-text">Card Number
         <input type="text"
                placeholder="0000 0000 0000 0000"
                v-mask="cardMask"
@@ -93,7 +99,8 @@
           </option>
         </select>
       </div>
-      <label for="" class="filling-form__label label-text">CVV
+      <label for=""
+             class="filling-form__label label-text">CVV
         <input type="number"
                placeholder="123"
                class="filling-form__reply reply reply_focus reply_hover reply_active"
@@ -102,7 +109,10 @@
                @focus="isShowCVV = true"
                @blur="isShowCVV = false">
       </label>
-      <button type="submit" class="filling-form__submit submit submit_focus submit_active submit_hover">Submit</button>
+      <button type="submit"
+              class="filling-form__submit submit submit_focus submit_active submit_hover">
+        Submit
+      </button>
     </form>
   </section>
 </template>
@@ -124,13 +134,13 @@ export default {
   }),
   computed: {
     gettingPaymentSystem() {
-      let re = new RegExp('^4')
-      if (this.cardNumber.match(re) !== null) return 'visa'
-      re = new RegExp('^5[1-5]')
-      if (this.cardNumber.match(re) !== null) return 'mastercard'
-      re = new RegExp('^2[1-5]')
-      if (this.cardNumber.match(re) !== null) return 'mir'
-      return 'visa'
+      let re = new RegExp("^4")
+      if (this.cardNumber.match(re) !== null) return "visa"
+      re = new RegExp("^5[1-5]")
+      if (this.cardNumber.match(re) !== null) return "mastercard"
+      re = new RegExp("^2[1-5]")
+      if (this.cardNumber.match(re) !== null) return "mir"
+      return "visa"
     },
     gettingCardNumber() {
       return (this.cardNumber.length === 0) ? "#### #### #### ####" : this.cardNumber
