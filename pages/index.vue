@@ -131,18 +131,26 @@ export default {
       re = new RegExp('^2[1-5]')
       if (this.cardNumber.match(re) !== null) return 'mir'
       return 'visa'
-      // let typeCard = ''
-      // let patterns = [
-      //   {pattern: '^4', title: 'visa'},
-      //   {pattern: '^5[1-5]', title: 'mastercard'},
-      //   {pattern: '^3', title: 'amex'},
-      //   {pattern: '^2[1-5]', title: 'mir'}
-      // ]
-      // patterns.forEach((element) => {
-      //   let re = new RegExp(`${element.pattern}`)
-      //   if (this.cardNumber.match(re) != null) return typeCard = element.title
-      // })
-      // return this.cardNumber === '' ? 'visa' : typeCard
+    },
+    gettingCardNumber() {
+      return (this.cardNumber.length === 0) ? "#### #### #### ####" : this.cardNumber
+    },
+    gettingCardCVV() {
+      return (this.cardCVV.length === 0) ? "***" : this.cardCVV
+    },
+    gettingCardHolder() {
+      return (this.cardHolder.length === 0) ? "Full Name" : this.cardHolder
+    },
+    gettingMonth() {
+      return (this.month.length === 0) ? "MM" : this.month
+    },
+    gettingYear() {
+      return (this.year.length === 0) ? "YY" : String(this.year).slice(2, 4)
+    }
+  },
+  watch: {
+    cardHolder() {
+      this.cardHolder = this.cardHolder.replace(/[^a-z\s]/gi, "")
     }
   }
 }
